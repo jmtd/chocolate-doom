@@ -1,0 +1,8 @@
+include_directories(../src)
+
+set(TEXTSCREEN_LIBRARY textscreen)
+file(GLOB TEXTSCREEN_HEADERS *.h)
+file(GLOB TEXTSCREEN_SOURCES *.c)
+list(APPEND TEXTSCREEN_HEADERS ../src/doomkeys.h)
+
+add_library(${TEXTSCREEN_LIBRARY} STATIC ${TEXTSCREEN_SOURCES} ${TEXTSCREEN_HEADERS})
