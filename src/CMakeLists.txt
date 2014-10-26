@@ -1,11 +1,13 @@
-find_package(SDL_net)
-include_directories(${SDLNET_INCLUDE_DIR})
-
 include_directories(../opl)
 
 include_directories(../pcsound)
 
 include_directories(../textscreen)
+
+find_package(SDL_net)
+include_directories(${SDLNET_INCLUDE_DIR})
+
+add_subdirectory(setup)
 
 set(LUADOOM_BINARY luadoom)
 file(GLOB LUADOOM_HEADERS *.h)
