@@ -74,6 +74,7 @@
 #include "r_local.h"
 #include "statdump.h"
 
+#include "l_main.h"
 
 #include "d_main.h"
 
@@ -2165,6 +2166,10 @@ void D_DoomMain (void)
 
     DEH_printf("S_Init: Setting up sound.\n");
     S_Init (sfxVolume * 8, musicVolume * 8);
+
+    printf("L_Init: Init %s\n", L_GetVersion());
+    L_Init();
+    I_AtExit(L_Free, true);
 
     DEH_printf("D_CheckNetGame: Checking network game status.\n");
     D_CheckNetGame ();
