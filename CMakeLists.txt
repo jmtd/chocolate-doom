@@ -3,8 +3,9 @@ cmake_minimum_required(VERSION 2.8)
 project("LUADoom")
 
 if(MSVC)
-  add_definitions(/D _CRT_NONSTDC_NO_DEPRECATE)
-  add_definitions(/D _CRT_SECURE_NO_WARNINGS)
+  set(SHARED_CFLAGS "/D _CRT_NONSTDC_NO_DEPRECATE /D _CRT_SECURE_NO_WARNINGS")
+else()
+  set(SHARED_CFLAGS "-Wall -Wdeclaration-after-statement -Wredundant-decls")
 endif()
 
 find_package(SDL)

@@ -20,6 +20,8 @@ include_directories(../opl)
 include_directories(../pcsound)
 include_directories(../textscreen)
 
+add_definitions(${SHARED_CFLAGS})
+
 add_executable(${LUADOOM_BINARY} WIN32
   ${LUADOOM_SOURCES} ${LUADOOM_HEADERS}
   ${DOOM_SOURCES} ${DOOM_HEADERS})
