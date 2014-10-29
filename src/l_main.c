@@ -22,6 +22,7 @@
 #include "lauxlib.h"
 
 #include "doomtype.h"
+#include "i_system.h"
 #include "w_wad.h"
 #include "z_zone.h"
 
@@ -76,12 +77,16 @@ static int LuaPanic(lua_State* L)
 }
 
 static int LuaWADSearcher(lua_State* L) {
+    int lump, size;
+    char* data;
+    const char* name;
+
     // Only parameter is the lump to load.
-    const char* name = luaL_checkstring(L, 1);
+    name = luaL_checkstring(L, 1);
 
     // Try to load the lump.
     // [AM] TODO: Ignore any lump outside of L_START/L_END
-    int lump = W_CheckNumForName((char*)name);
+    lump = W_CheckNumForName((char*)name);
     if (lump < 0)
     {
         lua_pushfstring(L, "error loading module: lump %s not found", name);
@@ -95,8 +100,8 @@ static int LuaWADSearcher(lua_State* L) {
     }
 
     // Cache and load lump;
-    int size = W_LumpLength(lump);
-    byte* data = W_CacheLumpNum(lump, PU_STATIC);
+    size = W_LumpLength(lump);
+    data = W_CacheLumpNum(lump, PU_STATIC);
     luaL_loadbuffer(L, data, size, name);
     return 1;
 }
@@ -106,6 +111,8 @@ static int LuaWADSearcher(lua_State* L) {
  */
 void L_Init()
 {
+    const luaL_Reg* lib;
+
     // Mark Lua start and end scripts so we don't accidentally
     // try to load something that's not a script as a script.
     firstscript = W_CheckNumForName("L_START");
@@ -129,7 +136,7 @@ void L_Init()
     }
 
     // Load default libraries
-    for (const luaL_Reg* lib = loadedlibs; lib->func; lib++)
+    for (lib = loadedlibs; lib->func; lib++)
     {
         luaL_requiref(lua, lib->name, lib->func, 1);
         lua_pop(lua, 1);
