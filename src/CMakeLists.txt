@@ -20,6 +20,12 @@ include_directories(../opl)
 include_directories(../pcsound)
 include_directories(../textscreen)
 
+if(APPLE)
+  list(APPEND LUADOOM_HEADERS osx/SDLmain.h)
+  list(APPEND LUADOOM_SOURCES osx/SDLmain.m)
+  include_directories(osx)
+endif()
+
 add_definitions(${SHARED_CFLAGS})
 
 add_executable(${LUADOOM_BINARY} WIN32

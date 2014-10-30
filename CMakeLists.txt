@@ -6,6 +6,11 @@ if(MSVC)
   set(SHARED_CFLAGS "/D _CRT_NONSTDC_NO_DEPRECATE /D _CRT_SECURE_NO_WARNINGS")
 else()
   set(SHARED_CFLAGS "-Wall -Wdeclaration-after-statement -Wredundant-decls")
+  if(APPLE)
+    # Add default framework search paths.  Without these, framework versions
+    # of SDL_mixer and SDL_net can't find SDL.
+    list(APPEND SHARED_CFLAGS "-F~/Library/Frameworks" "-F/Library/Frameworks")
+  endif()
 endif()
 
 find_package(SDL)

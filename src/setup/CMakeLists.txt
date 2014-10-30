@@ -9,8 +9,14 @@ list(APPEND SETUP_SOURCES
 include_directories(..)
 include_directories(../../textscreen)
 
+if(APPLE)
+  list(APPEND SETUP_HEADERS ../osx/SDLmain.h)
+  list(APPEND SETUP_SOURCES ../osx/SDLmain.m)
+endif()
+
 add_executable(${SETUP_BINARY} WIN32
   ${SETUP_SOURCES} ${SETUP_HEADERS})
 target_link_libraries(${SETUP_BINARY} ${SDL_LIBRARY})
+target_link_libraries(${SETUP_BINARY} ${SDLMIXER_LIBRARY})
 target_link_libraries(${SETUP_BINARY} ${SDLNET_LIBRARY})
 target_link_libraries(${SETUP_BINARY} textscreen)
