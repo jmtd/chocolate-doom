@@ -21,14 +21,20 @@
 #include "lualib.h"
 #include "lauxlib.h"
 
+#include "l_main.h"
+
 #include "doomtype.h"
 #include "i_system.h"
+#include "sc_man.h"
 #include "w_wad.h"
 #include "z_zone.h"
+
+#define MAX_LOADLUA 255
 
 static int firstscript;
 static int lastscript;
 static int numscripts;
+static int loadlua_lumps[MAX_LOADLUA];
 
 static const luaL_Reg loadedlibs[] =
 {
@@ -76,6 +82,9 @@ static int LuaPanic(lua_State* L)
     return 0;
 }
 
+/*
+ * Search for a Lua module located in a WAD file.
+ */
 static int LuaWADSearcher(lua_State* L) {
     int lump, size;
     char* data;
@@ -107,7 +116,7 @@ static int LuaWADSearcher(lua_State* L) {
 }
 
 /**
- * Initialize LUA scripts.
+ * Initialize LUA state.
  */
 void L_Init()
 {
@@ -152,12 +161,49 @@ void L_Init()
     lua_settable(lua, -3);
     lua_pop(lua, 2);
 
-    // TEST: See if we can require a module and run a function inside it
-    // lua_getglobal(lua, "require");
-    // lua_pushstring(lua, "DOOM");
-    // lua_pcall(lua, 1, 1, 0);
-    // lua_getfield(lua, -1, "hello");
-    // lua_pcall(lua, 0, 1, 0);
+    // Collect list of scripts to execute on every map load.
+    SC_Open("LOADLUA");
+    for (int loadlua_index = 0; loadlua_index < MAX_LOADLUA ; loadlua_index++)
+    {
+        if (SC_GetString())
+        {
+            loadlua_lumps[loadlua_index] = W_GetNumForName(sc_String);
+        }
+        else
+        {
+            loadlua_lumps[loadlua_index] = -1; // end of list
+            break;
+        }
+    }
+
+    L_RunLOADLUAScripts();
+}
+
+/**
+ * Run scripts that were loaded by LOADLUA
+ */
+void L_RunLOADLUAScripts()
+{
+    for (int loadlua_index = 0; loadlua_index < MAX_LOADLUA; loadlua_index++)
+    {
+        if (loadlua_lumps[loadlua_index] != -1)
+        {
+            int scriptlen = W_LumpLength(loadlua_lumps[loadlua_index]);
+            char* scriptdata = W_CacheLumpNum(loadlua_lumps[loadlua_index],
+                PU_STATIC);
+            int error = luaL_loadbuffer(lua, scriptdata, scriptlen, sc_String);
+            if (error)
+            {
+                I_Error("L_RunLOADLUAScripts: %s\n", luaL_checkstring(lua, -1));
+            }
+            lua_call(lua, 0, 0);
+            lua_pop(lua, 1);
+        }
+        else
+        {
+            break;
+        }
+    }
 }
 
 /**

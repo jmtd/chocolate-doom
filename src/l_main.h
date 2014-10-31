@@ -19,6 +19,7 @@
 #define L_MAIN_H
 
 void L_Init();
+void L_RunLOADLUAScripts();
 const char* L_GetVersion();
 void L_Free();
 
