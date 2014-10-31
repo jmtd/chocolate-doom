@@ -120,6 +120,7 @@ static int LuaWADSearcher(lua_State* L) {
  */
 void L_Init()
 {
+    int loadlua_index;
     const luaL_Reg* lib;
 
     // Mark Lua start and end scripts so we don't accidentally
@@ -163,7 +164,7 @@ void L_Init()
 
     // Collect list of scripts to execute on every map load.
     SC_Open("LOADLUA");
-    for (int loadlua_index = 0; loadlua_index < MAX_LOADLUA ; loadlua_index++)
+    for (loadlua_index = 0; loadlua_index < MAX_LOADLUA ; loadlua_index++)
     {
         if (SC_GetString())
         {
@@ -184,7 +185,8 @@ void L_Init()
  */
 void L_RunLOADLUAScripts()
 {
-    for (int loadlua_index = 0; loadlua_index < MAX_LOADLUA; loadlua_index++)
+    int loadlua_index;
+    for (loadlua_index = 0; loadlua_index < MAX_LOADLUA; loadlua_index++)
     {
         if (loadlua_lumps[loadlua_index] != -1)
         {
