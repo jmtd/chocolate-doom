@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-project("LUADoom")
+project("LuaDoom")
 
 if(MSVC)
   set(SHARED_CFLAGS "/D _CRT_NONSTDC_NO_DEPRECATE /D _CRT_SECURE_NO_WARNINGS")
