@@ -15,6 +15,7 @@
 // Lua state initialization, script loading, and other non-library code.
 //
 
+#include <stdlib.h>
 #include <string.h>
 
 #include "lua.h"
@@ -25,6 +26,7 @@
 
 #include "doomtype.h"
 #include "i_system.h"
+#include "m_misc.h"
 #include "sc_man.h"
 #include "w_wad.h"
 #include "z_zone.h"
@@ -34,7 +36,7 @@
 static int firstscript;
 static int lastscript;
 static int numscripts;
-static int loadlua_lumps[MAX_LOADLUA];
+static char* loadlua_scripts[MAX_LOADLUA];
 
 static const luaL_Reg loadedlibs[] =
 {
@@ -168,11 +170,11 @@ void L_Init()
     {
         if (SC_GetString())
         {
-            loadlua_lumps[loadlua_index] = W_GetNumForName(sc_String);
+            loadlua_scripts[loadlua_index] = M_StringDuplicate(sc_String);
         }
         else
         {
-            loadlua_lumps[loadlua_index] = -1; // end of list
+            loadlua_scripts[loadlua_index] = NULL; // end of list
             break;
         }
     }
@@ -181,25 +183,20 @@ void L_Init()
 }
 
 /**
- * Run scripts that were loaded by LOADLUA
+ * Run scripts that were cataloged by LOADLUA
  */
 void L_RunLOADLUAScripts()
 {
     int loadlua_index;
     for (loadlua_index = 0; loadlua_index < MAX_LOADLUA; loadlua_index++)
     {
-        if (loadlua_lumps[loadlua_index] != -1)
+        if (loadlua_scripts[loadlua_index] != NULL)
         {
-            int scriptlen = W_LumpLength(loadlua_lumps[loadlua_index]);
-            char* scriptdata = W_CacheLumpNum(loadlua_lumps[loadlua_index],
-                PU_STATIC);
-            int error = luaL_loadbuffer(lua, scriptdata, scriptlen, sc_String);
-            if (error)
-            {
-                I_Error("L_RunLOADLUAScripts: %s\n", luaL_checkstring(lua, -1));
-            }
-            lua_call(lua, 0, 0);
-            lua_pop(lua, 1);
+            // Use `require` to load the script.  They're not real modules, so
+            // we toss away any result that we get from loading it.
+            lua_getglobal(lua, "require");
+            lua_pushstring(lua, loadlua_scripts[loadlua_index]);
+            lua_call(lua, 1, 0);
         }
         else
         {
@@ -217,9 +214,14 @@ const char* L_GetVersion()
 }
 
 /**
- * Close LUA state.
+ * Close LUA state and clean up LOADLUA script names.
  */
 void L_Free()
 {
     lua_close(lua);
+
+    for (int loadlua_index = 0; loadlua_index < MAX_LOADLUA; loadlua_index++)
+    {
+        free(loadlua_scripts[loadlua_index]);
+    }
 }
