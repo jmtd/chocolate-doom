@@ -90,6 +90,9 @@ void P_AllocateThinker (thinker_t*	thinker)
 
 //
 // P_RunThinkers
+// [AM] FIXME: Pairing this with the native heap causes crashes when debugging
+//             under Visual C++.  Comparing against freed memory is UB that
+//             MSVC catches with its debug heap.
 //
 void P_RunThinkers (void)
 {

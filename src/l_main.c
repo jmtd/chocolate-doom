@@ -218,9 +218,11 @@ const char* L_GetVersion()
  */
 void L_Free()
 {
+    int loadlua_index;
+
     lua_close(lua);
 
-    for (int loadlua_index = 0; loadlua_index < MAX_LOADLUA; loadlua_index++)
+    for (loadlua_index = 0; loadlua_index < MAX_LOADLUA; loadlua_index++)
     {
         free(loadlua_scripts[loadlua_index]);
     }
