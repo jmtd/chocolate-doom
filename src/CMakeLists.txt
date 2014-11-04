@@ -38,3 +38,18 @@ target_link_libraries(${LUADOOM_BINARY} lua53)
 target_link_libraries(${LUADOOM_BINARY} opl)
 target_link_libraries(${LUADOOM_BINARY} pcsound)
 target_link_libraries(${LUADOOM_BINARY} textscreen)
+
+# Copy over lua files upon compile, not upon generation
+file(GLOB LUADOOM_LUA_SOURCES doom_lua/*.lua)
+foreach(_infile ${LUADOOM_LUA_SOURCES})
+  get_filename_component(_outfile ${_infile} NAME)
+  set(_outfile "${CMAKE_CURRENT_BINARY_DIR}/${_outfile}")
+  add_custom_command(
+    OUTPUT ${_outfile}
+    COMMAND ${CMAKE_COMMAND} -E copy ${_infile} ${_outfile}
+    MAIN_DEPENDENCY ${_infile})
+  list(APPEND LUADOOM_LUA_COPIED_SOURCES ${_outfile})
+endforeach()
+
+add_custom_target(luadoom-lua DEPENDS ${LUADOOM_LUA_COPIED_SOURCES})
+add_dependencies(${LUADOOM_BINARY} luadoom-lua)

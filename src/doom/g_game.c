@@ -1178,8 +1178,9 @@ void G_Ticker (void)
 	P_Ticker (); 
 	ST_Ticker (); 
 	AM_Ticker (); 
-	HU_Ticker ();            
-	break; 
+	// HU_Ticker ();            
+        L_CallFunction("hud", "ticker");
+        break; 
 	 
       case GS_INTERMISSION: 
 	WI_Ticker (); 

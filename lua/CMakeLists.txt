@@ -5,7 +5,5 @@ set(LIB_SOURCES lauxlib.c lbaselib.c lbitlib.c lcorolib.c ldblib.c
   liolib.c lmathlib.c loslib.c lstrlib.c ltablib.c lutf8lib.c loadlib.c
   linit.c)
 
-add_definitions(-DLUA_32BITS)
-
 set(LUA_LIBRARY lua53)
 add_library(${LUA_LIBRARY} STATIC ${CORE_SOURCES} ${LIB_SOURCES})

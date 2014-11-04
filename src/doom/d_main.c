@@ -2178,6 +2178,7 @@ void D_DoomMain (void)
 
     DEH_printf("HU_Init: Setting up heads up display.\n");
     HU_Init ();
+    L_CallFunction("hud", "init");
 
     DEH_printf("ST_Init: Init status bar.\n");
     ST_Init ();

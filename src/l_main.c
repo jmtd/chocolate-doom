@@ -26,6 +26,7 @@
 
 #include "doomtype.h"
 #include "i_system.h"
+#include "l_wad.h"
 #include "m_misc.h"
 #include "sc_man.h"
 #include "w_wad.h"
@@ -41,8 +42,9 @@ static char* loadlua_scripts[MAX_LOADLUA];
 static const luaL_Reg loadedlibs[] =
 {
     { "_G", luaopen_base },
-    { LUA_IOLIBNAME, luaopen_io },
     { LUA_LOADLIBNAME, luaopen_package },
+    { LUA_STRLIBNAME, luaopen_string },
+    { "wad", L_OpenWadLibrary },
     { NULL, NULL },
 };
 
@@ -178,12 +180,10 @@ void L_Init()
             break;
         }
     }
-
-    L_RunLOADLUAScripts();
 }
 
 /**
- * Run scripts that were cataloged by LOADLUA
+ * Run all scripts that were cataloged by LOADLUA
  */
 void L_RunLOADLUAScripts()
 {
@@ -204,6 +204,29 @@ void L_RunLOADLUAScripts()
         }
     }
 }
+
+/**
+ * Run a specific script in a specific module
+ */
+void L_CallFunction(const char* module, const char* function)
+{
+    lua_getglobal(lua, "require");
+    lua_pushstring(lua, module);
+    lua_call(lua, 1, 1);
+    if (lua_type(lua, -1) != LUA_TTABLE)
+    {
+        I_Error("Can't find Lua module '%s'.", module);
+    }
+    lua_pushstring(lua, function);
+    lua_gettable(lua, -2);
+    if (lua_type(lua, -1) != LUA_TFUNCTION)
+    {
+        I_Error("Can't find Lua function '%s' in module '%s'.", function, module);
+    }
+    lua_call(lua, 0, 0);
+    lua_pop(lua, 1);
+}
+
 
 /**
  * Getter for the current version of Lua.

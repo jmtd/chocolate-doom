@@ -12,16 +12,15 @@
 // GNU General Public License for more details.
 //
 //
-// Lua state initialization, script loading, and other non-library code.
+// Lua WAD-handling library
 //
 
-#ifndef L_MAIN_H
-#define L_MAIN_H
+#ifndef L_WAD_H
+#define L_WAD_H
 
-void L_Init();
-void L_RunLOADLUAScripts();
-void L_CallFunction(const char* module, const char* function);
-const char* L_GetVersion();
-void L_Free();
+#include "lua.h"
+#include "lauxlib.h"
+
+LUAMOD_API int L_OpenWadLibrary(lua_State *L);
 
 #endif
