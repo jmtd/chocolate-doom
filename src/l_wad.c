@@ -26,8 +26,11 @@
 // Returns lump data as a string.  On error returns nil and an error string.
 static int CacheLumpName(lua_State *L)
 {
-    char* name = luaL_checkstring(L, 1);
-    int tag = luaL_checkinteger(L, 2);
+    char *data, *name;
+    int length, lump, tag;
+
+    name = (char*)luaL_checkstring(L, 1);
+    tag = luaL_checkinteger(L, 2);
 
     // Check to make sure we're using a valid tag.
     if (tag <= 0 || tag >= PU_NUM_TAGS)
@@ -38,7 +41,7 @@ static int CacheLumpName(lua_State *L)
     }
 
     // Find the lump number so we can get its length too.
-    int lump = W_GetNumForName(name);
+    lump = W_GetNumForName(name);
     if (lump < 0)
     {
         lua_pushnil(L);
@@ -47,8 +50,8 @@ static int CacheLumpName(lua_State *L)
     }
 
     // Pass back the lump data as a string.
-    int length = W_LumpLength(lump);
-    char* data = W_CacheLumpName(name, tag);
+    length = W_LumpLength(lump);
+    data = W_CacheLumpName(name, tag);
     lua_pushlstring(L, data, length);
     return 1;
 }
