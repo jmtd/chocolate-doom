@@ -167,19 +167,21 @@ void L_Init()
     lua_pushcfunction(lua, LuaWADSearcher);
     lua_settable(lua, -3);
     lua_pop(lua, 2);
-
     // Collect list of scripts to execute on every map load.
-    // SC_Open("LOADLUA");
-    for (loadlua_index = 0; loadlua_index < MAX_LOADLUA ; loadlua_index++)
+    if (W_CheckNumForName("LOADLUA") >= 0)
     {
-        if (false) // || SC_GetString())
+        SC_Open("LOADLUA");
+        for (loadlua_index = 0; loadlua_index < MAX_LOADLUA ; loadlua_index++)
         {
-            loadlua_scripts[loadlua_index] = M_StringDuplicate(sc_String);
-        }
-        else
-        {
-            loadlua_scripts[loadlua_index] = NULL; // end of list
-            break;
+            if (SC_GetString())
+            {
+                loadlua_scripts[loadlua_index] = M_StringDuplicate(sc_String);
+            }
+            else
+            {
+                loadlua_scripts[loadlua_index] = NULL; // end of list
+                break;
+            }
         }
     }
 }
