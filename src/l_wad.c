@@ -73,6 +73,8 @@ static struct luaL_Reg funcs[] = {
 
 LUAMOD_API int L_OpenWadLibrary(lua_State *L)
 {
+    luaL_newmetatable(L, "buffer");
+    lua_pop(L, 1);
     luaL_newlib(L, funcs);
     return 1;
 }

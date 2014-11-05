@@ -54,6 +54,7 @@ end
 
 hud.ticker = function()
   -- Stuff goes here
+  video.drawPatchDirect(0, 0, hud.font[8])
 end
 
 return hud

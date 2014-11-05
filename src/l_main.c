@@ -169,10 +169,10 @@ void L_Init()
     lua_pop(lua, 2);
 
     // Collect list of scripts to execute on every map load.
-    SC_Open("LOADLUA");
+    // SC_Open("LOADLUA");
     for (loadlua_index = 0; loadlua_index < MAX_LOADLUA ; loadlua_index++)
     {
-        if (SC_GetString())
+        if (false) // || SC_GetString())
         {
             loadlua_scripts[loadlua_index] = M_StringDuplicate(sc_String);
         }

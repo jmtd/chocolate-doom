@@ -28,8 +28,8 @@ static int DrawPatchDirect(lua_State *L)
     int x, y;
     patch_t* data;
 
-	x = luaL_checkinteger(L, 1);
-	y = luaL_checkinteger(L, 2);
+    x = luaL_checkinteger(L, 1);
+    y = luaL_checkinteger(L, 2);
     data = luaL_checkudata(L, 3, "buffer");
 
     // Does the actual patch drawing.
