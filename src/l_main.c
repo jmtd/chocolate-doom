@@ -27,6 +27,7 @@
 #include "doomtype.h"
 #include "i_system.h"
 #include "l_wad.h"
+#include "l_video.h"
 #include "m_misc.h"
 #include "sc_man.h"
 #include "w_wad.h"
@@ -45,6 +46,7 @@ static const luaL_Reg loadedlibs[] =
     { LUA_LOADLIBNAME, luaopen_package },
     { LUA_STRLIBNAME, luaopen_string },
     { "wad", L_OpenWadLibrary },
+    { "video", L_OpenVideoLibrary },
     { NULL, NULL },
 };
 

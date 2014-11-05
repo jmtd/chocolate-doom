@@ -15,6 +15,8 @@
 // Lua WAD-handling library
 //
 
+#include <string.h>
+
 #include "lua.h"
 #include "lauxlib.h"
 
@@ -26,6 +28,7 @@
 // Returns lump data as a string.  On error returns nil and an error string.
 static int CacheLumpName(lua_State *L)
 {
+    void *buffer;
     char *data, *name;
     int length, lump, tag;
 
@@ -49,10 +52,16 @@ static int CacheLumpName(lua_State *L)
         return 2;
     }
 
-    // Pass back the lump data as a string.
+    // Grab our data.
     length = W_LumpLength(lump);
     data = W_CacheLumpName(name, tag);
-    lua_pushlstring(L, data, length);
+
+    // Create a userdata and copy the lump to it.
+    // [AM] FIXME: Do we have to make a copy of the lump if it's tagged
+    //             as PU_STATIC, or can we use the pointer directly?
+    buffer = lua_newuserdata(L, length);
+    memcpy(buffer, data, length);
+    luaL_setmetatable(L, "buffer");
     return 1;
 }
 
