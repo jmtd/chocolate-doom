@@ -746,6 +746,18 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(screen_height),
 
     //!
+    // Width of PNG screenshots, in pixels.
+    //
+
+    CONFIG_VARIABLE_INT(screenshot_width),
+
+    //!
+    // Height of PNG screenshots, in pixels.
+    //
+
+    CONFIG_VARIABLE_INT(screenshot_height),
+
+    //!
     // If this is non-zero, the mouse will be "grabbed" when running
     // in windowed mode so that it can be used as an input device.
     // When running full screen, this has no effect.
