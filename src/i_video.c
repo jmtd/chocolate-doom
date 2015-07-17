@@ -1241,7 +1241,7 @@ static void GetScreenModes(screen_mode_t ***modes_list, int *num_modes)
 
 // Find which screen_mode_t to use for the given width and height.
 
-static screen_mode_t *I_FindScreenMode(int w, int h)
+screen_mode_t *I_FindScreenMode(int w, int h, int _fullscreen)
 {
     screen_mode_t **modes_list;
     screen_mode_t *best_mode;
@@ -1254,7 +1254,7 @@ static screen_mode_t *I_FindScreenMode(int w, int h)
     // ratio correction is turned on.  These modes have non-square
     // pixels.
 
-    if (fullscreen)
+    if (_fullscreen)
     {
         if (w == SCREENWIDTH && h == SCREENHEIGHT)
         {
@@ -1325,7 +1325,7 @@ static boolean AutoAdjustFullscreen(void)
 
         // What screen_mode_t would be used for this video mode?
 
-        screen_mode = I_FindScreenMode(mode_info.w, mode_info.h);
+        screen_mode = I_FindScreenMode(mode_info.w, mode_info.h, 1);
 
         // Never choose a screen mode that we cannot run in, or
         // is poor quality for fullscreen
@@ -1384,14 +1384,14 @@ static void AutoAdjustWindowed(void)
 
     // Find a screen_mode_t to fit within the current settings
 
-    best_mode = I_FindScreenMode(screen_width, screen_height);
+    best_mode = I_FindScreenMode(screen_width, screen_height, 0);
 
     if (best_mode == NULL)
     {
         // Nothing fits within the current settings.
         // Pick the closest to 320x200 possible.
 
-        best_mode = I_FindScreenMode(SCREENWIDTH, SCREENHEIGHT_4_3);
+        best_mode = I_FindScreenMode(SCREENWIDTH, SCREENHEIGHT_4_3, 0);
     }
 
     // Switch to the best mode if necessary.
@@ -1837,10 +1837,14 @@ static void SetVideoMode(screen_mode_t *mode, int w, int h)
 
     if (mode == NULL)
     {
+<<<<<<< HEAD
         int screen_w, screen_h;
 
         SDL_GetWindowSize(screen, &screen_w, &screen_h);
         mode = I_FindScreenMode(screen_w, screen_h);
+=======
+        mode = I_FindScreenMode(screen->w, screen->h, fullscreen);
+>>>>>>> b61b980... Adjust I_FindScreenMode to be non-static
 
         if (mode == NULL)
         {
@@ -1909,11 +1913,11 @@ static void ApplyWindowResize(unsigned int w, unsigned int h)
     // dimensions, falling back to the smallest mode possible if
     // none is found.
 
-    mode = I_FindScreenMode(w, h);
+    mode = I_FindScreenMode(w, h, fullscreen);
 
     if (mode == NULL)
     {
-        mode = I_FindScreenMode(SCREENWIDTH, SCREENHEIGHT);
+        mode = I_FindScreenMode(SCREENWIDTH, SCREENHEIGHT, fullscreen);
     }
 
     // Reset mode to resize window.
@@ -1993,8 +1997,12 @@ void I_InitGraphics(void)
         w = screen_width;
         h = screen_height;
 
+<<<<<<< HEAD
 #if 0 // obsolete software scaling routines
         screen_mode = I_FindScreenMode(w, h);
+=======
+        screen_mode = I_FindScreenMode(w, h, fullscreen);
+>>>>>>> b61b980... Adjust I_FindScreenMode to be non-static
 
         if (screen_mode == NULL)
         {
