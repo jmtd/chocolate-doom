@@ -891,13 +891,13 @@ static void UpdateGrab(void)
 }
 
 #if 0 // obsolete software scaling routines
-// Update a small portion of the screen
+// Update the screen
 //
 // Does stretching and buffer blitting if neccessary
 //
 // Return true if blit was successful.
 
-static boolean BlitArea(int x1, int y1, int x2, int y2)
+static boolean Blit()
 {
     int x_offset, y_offset;
     boolean result;
@@ -907,12 +907,12 @@ static boolean BlitArea(int x1, int y1, int x2, int y2)
 
     if (SDL_LockSurface(screenbuffer) >= 0)
     {
-        I_InitScale(I_VideoBuffer,
-                    (byte *) screenbuffer->pixels
-                                + (y_offset * screenbuffer->pitch)
-                                + x_offset,
-                    screenbuffer->pitch);
-        result = screen_mode->DrawScreen(x1, y1, x2, y2);
+        result = screen_mode->DrawScreen(
+            (byte *) screenbuffer->pixels
+                        + (y_offset * screenbuffer->pitch)
+                        + x_offset,
+            screenbuffer->pitch);
+
       	SDL_UnlockSurface(screenbuffer);
     }
     else
@@ -1075,7 +1075,7 @@ void I_FinishUpdate (void)
 #if 0 // obsolete software scaling routines
     // draw to screen
 
-    BlitArea(0, 0, SCREENWIDTH, SCREENHEIGHT);
+    Blit();
 #endif
 
     if (palette_to_set)
@@ -1837,14 +1837,10 @@ static void SetVideoMode(screen_mode_t *mode, int w, int h)
 
     if (mode == NULL)
     {
-<<<<<<< HEAD
         int screen_w, screen_h;
 
         SDL_GetWindowSize(screen, &screen_w, &screen_h);
-        mode = I_FindScreenMode(screen_w, screen_h);
-=======
-        mode = I_FindScreenMode(screen->w, screen->h, fullscreen);
->>>>>>> b61b980... Adjust I_FindScreenMode to be non-static
+        mode = I_FindScreenMode(screen_w, screen_h, fullscreen);
 
         if (mode == NULL)
         {
@@ -1997,12 +1993,8 @@ void I_InitGraphics(void)
         w = screen_width;
         h = screen_height;
 
-<<<<<<< HEAD
 #if 0 // obsolete software scaling routines
-        screen_mode = I_FindScreenMode(w, h);
-=======
         screen_mode = I_FindScreenMode(w, h, fullscreen);
->>>>>>> b61b980... Adjust I_FindScreenMode to be non-static
 
         if (screen_mode == NULL)
         {
@@ -2053,6 +2045,7 @@ void I_InitGraphics(void)
     // finally rendered into our window or full screen in I_FinishUpdate().
 
     I_VideoBuffer = screenbuffer->pixels;
+
     V_RestoreBuffer();
 
     // Clear the screen to black.
