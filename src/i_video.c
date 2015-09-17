@@ -2044,6 +2044,9 @@ void I_InitGraphics(void)
 
     I_VideoBuffer = screenbuffer->pixels;
 
+    // init the scalers (needed fo screenshots)
+    I_InitScale(I_VideoBuffer);
+
     V_RestoreBuffer();
 
     // Clear the screen to black.
