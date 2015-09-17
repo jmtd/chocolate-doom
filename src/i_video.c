@@ -96,7 +96,6 @@ static const char shiftxform[] =
 #define LOADING_DISK_W 16
 #define LOADING_DISK_H 16
 
-#if 0 // obsolete software scaling routines
 // Non aspect ratio-corrected modes (direct multiples of 320x200)
 
 static screen_mode_t *screen_modes[] = {
@@ -126,7 +125,6 @@ static screen_mode_t *screen_modes_corrected[] = {
     &mode_squash_3x,
     &mode_squash_4x,
 };
-#endif
 
 // SDL video driver name
 
@@ -1222,7 +1220,6 @@ void I_InitWindowIcon(void)
     SDL_FreeSurface(surface);
 }
 
-#if 0 // obsolete software scaling routines
 // Pick the modes list to use:
 
 static void GetScreenModes(screen_mode_t ***modes_list, int *num_modes)
@@ -1240,7 +1237,6 @@ static void GetScreenModes(screen_mode_t ***modes_list, int *num_modes)
 }
 
 // Find which screen_mode_t to use for the given width and height.
-
 screen_mode_t *I_FindScreenMode(int w, int h, int _fullscreen)
 {
     screen_mode_t **modes_list;
@@ -1296,6 +1292,8 @@ screen_mode_t *I_FindScreenMode(int w, int h, int _fullscreen)
 
     return best_mode;
 }
+
+#if 0
 
 // Adjust to an appropriate fullscreen mode.
 // Returns true if successful.
