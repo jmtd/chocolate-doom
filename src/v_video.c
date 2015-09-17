@@ -608,7 +608,7 @@ static void V_InitScreenShotScaler()
     screen_mode_t *mode;
     byte *doompal;
 
-    mode = I_FindScreenMode(screenshot_width, screenshot_height, 0);
+    mode = I_FindScreenMode(screenshot_width, screenshot_height);
 
     if (!mode)
     {

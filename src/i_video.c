@@ -1237,7 +1237,8 @@ static void GetScreenModes(screen_mode_t ***modes_list, int *num_modes)
 }
 
 // Find which screen_mode_t to use for the given width and height.
-screen_mode_t *I_FindScreenMode(int w, int h, int _fullscreen)
+// XXX: all callers fullscreen = 0, refcator
+screen_mode_t *I_FindScreenMode(int w, int h)
 {
     screen_mode_t **modes_list;
     screen_mode_t *best_mode;
@@ -1245,22 +1246,6 @@ screen_mode_t *I_FindScreenMode(int w, int h, int _fullscreen)
     int num_pixels;
     int best_num_pixels;
     int i;
-
-    // Special case: 320x200 and 640x400 are available even if aspect 
-    // ratio correction is turned on.  These modes have non-square
-    // pixels.
-
-    if (_fullscreen)
-    {
-        if (w == SCREENWIDTH && h == SCREENHEIGHT)
-        {
-            return &mode_scale_1x;
-        }
-        else if (w == SCREENWIDTH*2 && h == SCREENHEIGHT*2)
-        {
-            return &mode_scale_2x;
-        }
-    }
 
     GetScreenModes(&modes_list, &modes_list_length);
 

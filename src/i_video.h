@@ -126,7 +126,7 @@ void I_InitWindowIcon(void);
 // called with a requested width and height, returns a screen_mode_t
 // that best matches
 
-screen_mode_t *I_FindScreenMode(int w, int h, int _fullscreen);
+screen_mode_t *I_FindScreenMode(int w, int h);
 
 // Called before processing any tics in a frame (just after displaying a frame).
 // Time consuming syncronous operations are performed here (joystick reading).
