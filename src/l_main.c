@@ -15,6 +15,7 @@
 // Lua state initialization, script loading, and other non-library code.
 //
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -121,6 +122,15 @@ static int LuaWADSearcher(lua_State* L) {
     return 1;
 }
 
+/*
+ * XXX: jmtd hacky thing
+ */
+static int L_Hello(lua_State *L)
+{
+    fprintf(stderr, "Hello world - from Lua\n");
+    return 0;
+}
+
 /**
  * Initialize LUA state.
  */
@@ -158,6 +168,11 @@ void L_Init()
         lua_pop(lua, 1);
     }
 
+    // Jon's hacky thing
+    //lua_register(L, "hello", L_Hello);
+    lua_pushcfunction(lua, L_Hello);
+    lua_setglobal(lua, "hello");
+
     // Add WAD package searcher to the end of the searcher list.
     lua_getglobal(lua, "package");
     lua_getfield(lua, -1, "searchers");
@@ -184,6 +199,7 @@ void L_Init()
             }
         }
     }
+    L_RunLOADLUAScripts();
 }
 
 /**
