@@ -78,14 +78,14 @@ static SDL_Rect blit_rect = {
     SCREENWIDTH,
     SCREENHEIGHT
 };
-// modified to reflect which of three buffers we're pointing at
+// which of the three buffers do we read from
 static SDL_Rect src_rect = {
     0,
-    0,
+    2*SCREENHEIGHT,
     SCREENWIDTH,
     SCREENHEIGHT
 };
-// which of the three buffers is active
+// which of the three buffers do we write to
 static char active_buffer = 0;
 
 // palette
@@ -184,8 +184,9 @@ static unsigned int last_resize_time;
 
 int usegamma = 0;
 
-// switch which is the active buffer from our 3
-
+// switch which is the active buffer from our 3. We always write to
+// the active buffer. We always read from the previous buffer (which
+// is described by src_rect)
 static void rotateBuffers()
 {
     active_buffer = (active_buffer + 1) % 3;
@@ -193,12 +194,18 @@ static void rotateBuffers()
     if(0 == active_buffer) // wrap around
     {
             I_VideoBuffer -= (SCREENWIDTH * SCREENHEIGHT * 2);
-            src_rect.y = 0;
     }
     else
     {
             I_VideoBuffer += (SCREENWIDTH * SCREENHEIGHT);
-            src_rect.y += SCREENHEIGHT;
+    }
+    if(1 == active_buffer)
+    {
+        src_rect.y = 0;
+    }
+    else
+    {
+        src_rect.y += SCREENHEIGHT;
     }
 }
 
@@ -648,7 +655,8 @@ void I_FinishUpdate (void)
 //
 void I_ReadScreen (byte* scr)
 {
-    memcpy(scr, I_VideoBuffer, SCREENWIDTH*SCREENHEIGHT*sizeof(*scr));
+    memcpy(scr, I_VideoBuffer + (SCREENWIDTH * src_rect.y),
+        SCREENWIDTH*SCREENHEIGHT*sizeof(*scr));
 }
 
 
@@ -1194,8 +1202,8 @@ void I_InitGraphics(void)
     V_RestoreBuffer();
 
     // Clear the screen to black.
-
-    memset(I_VideoBuffer, 0, SCREENWIDTH * SCREENHEIGHT);
+    // XXX: is this not superfluous given  SDL_FillRect above?
+    memset(I_VideoBuffer, 0, SCREENWIDTH * SCREENHEIGHT * 3);
 
     // We need SDL to give us translated versions of keys as well
 
