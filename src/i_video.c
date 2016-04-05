@@ -78,6 +78,15 @@ static SDL_Rect blit_rect = {
     SCREENWIDTH,
     SCREENHEIGHT
 };
+// modified to reflect which of three buffers we're pointing at
+static SDL_Rect src_rect = {
+    0,
+    0,
+    SCREENWIDTH,
+    SCREENHEIGHT
+};
+// which of the three buffers is active
+static char active_buffer = 0;
 
 // palette
 
@@ -174,6 +183,24 @@ static unsigned int last_resize_time;
 // Gamma correction level to use
 
 int usegamma = 0;
+
+// switch which is the active buffer from our 3
+
+static void rotateBuffers()
+{
+    active_buffer = (active_buffer + 1) % 3;
+
+    if(0 == active_buffer) // wrap around
+    {
+            I_VideoBuffer -= (SCREENWIDTH * SCREENHEIGHT * 2);
+            src_rect.y = 0;
+    }
+    else
+    {
+            I_VideoBuffer += (SCREENWIDTH * SCREENHEIGHT);
+            src_rect.y += SCREENHEIGHT;
+    }
+}
 
 static boolean MouseShouldBeGrabbed()
 {
@@ -587,7 +614,7 @@ void I_FinishUpdate (void)
     // Blit from the paletted 8-bit screen buffer to the intermediate
     // 32-bit RGBA buffer that we can load into the texture.
 
-    SDL_LowerBlit(screenbuffer, &blit_rect, rgbabuffer, &blit_rect);
+    SDL_LowerBlit(screenbuffer, &src_rect, rgbabuffer, &blit_rect);
 
     // Update the intermediate texture with the contents of the RGBA buffer.
 
@@ -611,6 +638,8 @@ void I_FinishUpdate (void)
     // Draw!
 
     SDL_RenderPresent(renderer);
+
+    rotateBuffers();
 }
 
 
@@ -1052,8 +1081,8 @@ static void SetVideoMode(int w, int h)
 
     // Create the 8-bit paletted and the 32-bit RGBA screenbuffer surfaces.
 
-    screenbuffer = SDL_CreateRGBSurface(0,
-                                        SCREENWIDTH, SCREENHEIGHT, 8,
+    screenbuffer = SDL_CreateRGBSurface(0, // triple buffered
+                                        SCREENWIDTH, SCREENHEIGHT*3, 8,
                                         0, 0, 0, 0);
     SDL_FillRect(screenbuffer, NULL, 0);
 
