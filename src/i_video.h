@@ -78,6 +78,8 @@ void I_StartTic (void);
 
 void I_EnableLoadingDisk(int xoffs, int yoffs);
 
+void I_SavePNGScreenshot (char *filename);
+
 extern char *video_driver;
 extern boolean screenvisible;
 
