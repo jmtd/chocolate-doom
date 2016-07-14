@@ -177,7 +177,6 @@
     <ClInclude Include="..\src\i_endoom.h" />
     <ClInclude Include="..\src\i_input.h" />
     <ClInclude Include="..\src\i_joystick.h" />
-    <ClInclude Include="..\src\i_scale.h" />
     <ClInclude Include="..\src\i_sound.h" />
     <ClInclude Include="..\src\i_swap.h" />
     <ClInclude Include="..\src\i_system.h" />
