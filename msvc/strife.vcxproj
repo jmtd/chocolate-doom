@@ -97,7 +97,7 @@
       <CompileAs>CompileAsC</CompileAs>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SDL.lib;SDL_mixer.lib;SDL_net.lib;SDLmain.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_net.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)chocolate-strife.exe</OutputFile>
       <IgnoreSpecificDefaultLibraries>msvcrtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>false</GenerateDebugInformation>

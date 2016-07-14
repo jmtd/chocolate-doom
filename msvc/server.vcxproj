@@ -91,7 +91,7 @@
       <PreprocessorDefinitions>DEDICATEDSERVER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>SDL.lib;SDL_net.lib;SDLmain.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2_net.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)chocolate-server.exe</OutputFile>
       <IgnoreSpecificDefaultLibraries>msvcrtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>false</GenerateDebugInformation>

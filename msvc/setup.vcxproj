@@ -92,7 +92,7 @@
       <PreprocessorDefinitions>CHOCOLATESETUP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>SDL.lib;SDLmain.lib;SDL_net.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2_net.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)chocolate-setup.exe</OutputFile>
       <IgnoreSpecificDefaultLibraries>msvcrtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>false</GenerateDebugInformation>
