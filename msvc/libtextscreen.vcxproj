@@ -87,6 +87,7 @@
   <ItemGroup>
     <ClCompile Include="..\textscreen\txt_button.c" />
     <ClCompile Include="..\textscreen\txt_checkbox.c" />
+    <ClCompile Include="..\textscreen\txt_conditional.c" />
     <ClCompile Include="..\textscreen\txt_desktop.c" />
     <ClCompile Include="..\textscreen\txt_dropdown.c" />
     <ClCompile Include="..\textscreen\txt_fileselect.c" />
@@ -110,6 +111,7 @@
     <ClInclude Include="..\textscreen\textscreen.h" />
     <ClInclude Include="..\textscreen\txt_button.h" />
     <ClInclude Include="..\textscreen\txt_checkbox.h" />
+    <ClInclude Include="..\textscreen\txt_conditional.h" />
     <ClInclude Include="..\textscreen\txt_desktop.h" />
     <ClInclude Include="..\textscreen\txt_dropdown.h" />
     <ClInclude Include="..\textscreen\txt_fileselect.h" />

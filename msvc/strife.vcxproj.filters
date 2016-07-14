@@ -69,9 +69,6 @@
     <ClInclude Include="..\src\i_joystick.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\i_scale.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\i_sound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -342,6 +339,9 @@
     <ClInclude Include="..\src\strife\wi_stuff.h">
       <Filter>Header Files\strife</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\i_input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\aes_prng.c">
@@ -393,9 +393,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\i_pcsound.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\i_scale.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\i_sdlmusic.c">
@@ -697,6 +694,9 @@
     </ClCompile>
     <ClCompile Include="..\src\strife\wi_stuff.c">
       <Filter>Source Files\strife</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\i_input.c">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -75,6 +75,9 @@
     <ClCompile Include="..\textscreen\txt_window_action.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\textscreen\txt_conditional.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\textscreen\textscreen.h">
@@ -150,6 +153,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\textscreen\txt_window_action.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\textscreen\txt_conditional.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

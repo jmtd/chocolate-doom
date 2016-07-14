@@ -54,7 +54,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.;..\src;..\src\strife;..\textscreen;..\pcsound;..\opl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;include;..\src;..\src\strife;..\textscreen;..\pcsound;..\opl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;PROGRAM_PREFIX="chocolate-";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <ExceptionHandling />
@@ -69,13 +69,14 @@
       <CompileAs>CompileAsC</CompileAs>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SDL.lib;SDL_mixer.lib;SDL_net.lib;SDLmain.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_net.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)chocolate-strife-dbg.exe</OutputFile>
       <IgnoreSpecificDefaultLibraries>msvcrt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalLibraryDirectories>lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -127,8 +128,8 @@
     <ClInclude Include="..\src\gusconf.h" />
     <ClInclude Include="..\src\i_cdmus.h" />
     <ClInclude Include="..\src\i_endoom.h" />
+    <ClInclude Include="..\src\i_input.h" />
     <ClInclude Include="..\src\i_joystick.h" />
-    <ClInclude Include="..\src\i_scale.h" />
     <ClInclude Include="..\src\i_sound.h" />
     <ClInclude Include="..\src\i_swap.h" />
     <ClInclude Include="..\src\i_system.h" />
@@ -235,11 +236,11 @@
     <ClCompile Include="..\src\icon.c" />
     <ClCompile Include="..\src\i_cdmus.c" />
     <ClCompile Include="..\src\i_endoom.c" />
+    <ClCompile Include="..\src\i_input.c" />
     <ClCompile Include="..\src\i_joystick.c" />
     <ClCompile Include="..\src\i_main.c" />
     <ClCompile Include="..\src\i_oplmusic.c" />
     <ClCompile Include="..\src\i_pcsound.c" />
-    <ClCompile Include="..\src\i_scale.c" />
     <ClCompile Include="..\src\i_sdlmusic.c" />
     <ClCompile Include="..\src\i_sdlsound.c" />
     <ClCompile Include="..\src\i_sound.c" />

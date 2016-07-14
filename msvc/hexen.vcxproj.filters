@@ -54,9 +54,6 @@
     <ClCompile Include="..\src\i_pcsound.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\i_scale.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\i_sdlmusic.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -321,6 +318,9 @@
     <ClCompile Include="..\src\hexen\sv_save.c">
       <Filter>Source Files\hexen</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\i_input.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\d_event.h">
@@ -357,9 +357,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\i_joystick.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\i_scale.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\i_sound.h">
@@ -511,6 +508,9 @@
     </ClInclude>
     <ClInclude Include="..\src\hexen\xddefs.h">
       <Filter>Header Files\hexen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\i_input.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
