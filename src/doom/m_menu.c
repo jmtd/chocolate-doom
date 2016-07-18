@@ -636,39 +636,61 @@ void M_DoSave(int slot)
 // would just have a blank name.
 static void SetDefaultSaveName(int slot)
 {
-    int i;
+    int i, len, maplen;
     char *iwad;
 
     // vanilla/default behaviour: removing "empty save"
     savegamestrings[slot][0] = 0;
 
     // new behaviour: TODO check whether selected w/ gamepad
+    #define MIN(x,y) ((x) < (y) ? (x) : (y))
     iwad = gamedescription;
+    len = MIN(strlen(iwad), SAVESTRINGSIZE);
 
-    M_snprintf(savegamestrings[slot], 23, "%s", gamedescription);
+    if(logical_gamemission == doom)
+    {
+        maplen = 6; // ' ExMx\0'
+    }
+    else
+    {
+        maplen = 7; // ' MAPxx\0'
+    }
 
-    // even the slot iwad might overflow this for final doom
-    // or doom2. gamedescription is simply too long. But it does cover the
-    // startup banner which is useful.HMM!
-    if (strlen(iwad) > SAVESTRINGSIZE)
+    // gamedescription is the best iwad description since it might have been
+    // overridden by Dehacked; however, it could be too long for the savegame
+    // string and reserved space for the map name. If so, revert to the iwad
+    // filename.
+    if (len > SAVESTRINGSIZE - maplen)
     {
         for (i = 0; i < arrlen(iwads); ++i)
         {
-            if (iwads[i].mission == gamemission)
+            if (iwads[i].mission == logical_gamemission
+                && iwads[i].mode == gamemode
+                && iwads[i].variant == gamevariant)
             {
-                iwad = iwads[i].name;
+                iwad = iwads[i].short_description;
+                len = MIN(strlen(iwad), SAVESTRINGSIZE);
                 break;
             }
         }
     }
-    // XXX NO over flow checking yet
-    if(logical_gamemission == doom)
+
+    if (len < SAVESTRINGSIZE - maplen)
     {
-        sprintf(savegamestrings[slot], "%s E%1dM%1d", iwad, gameepisode, gamemap);
+        if (logical_gamemission == doom)
+        {
+            M_snprintf(savegamestrings[slot], SAVESTRINGSIZE,
+                "%s E%1dM%1d", iwad, gameepisode, gamemap);
+        }
+        else
+        {
+            M_snprintf(savegamestrings[slot], SAVESTRINGSIZE,
+                "%s MAP%02d", iwad, gamemap);
+        }
     }
     else
     {
-        sprintf(savegamestrings[slot], "%s MAP%02d", iwad, gamemap);
+        M_snprintf(savegamestrings[slot], SAVESTRINGSIZE, "%s", iwad);
     }
 }
 
