@@ -48,5 +48,8 @@ char *D_SuggestIWADName(GameMission_t mission, GameMode_t mode);
 char *D_SuggestGameName(GameMission_t mission, GameMode_t mode);
 void D_CheckCorrectIWAD(GameMission_t mission);
 
+#define NUM_IWADS 14
+extern const iwad_t iwads[NUM_IWADS]; // mappings of iwad name to variant,mission types and a string long desc
+
 #endif
 

@@ -40,7 +40,7 @@
 #include "mode.h"
 
 GameMission_t gamemission;
-static const iwad_t **iwads;
+static const iwad_t **my_iwads;
 
 typedef struct
 {
@@ -217,7 +217,7 @@ static void SetExecutable(mission_config_t *config)
 
 static void SetMission(mission_config_t *config)
 {
-    iwads = D_FindAllIWADs(config->mask);
+    my_iwads = D_FindAllIWADs(config->mask);
     gamemission = config->mission;
     SetExecutable(config);
     game_title = config->label;
@@ -277,7 +277,7 @@ static void OpenGameSelectDialog(GameSelectCallback callback)
 {
     mission_config_t *mission = NULL;
     txt_window_t *window;
-    const iwad_t **iwads;
+    const iwad_t **more_iwads;
     int num_games;
     int i;
 
@@ -293,9 +293,9 @@ static void OpenGameSelectDialog(GameSelectCallback callback)
         // Do we have any IWADs for this game installed?
         // If so, add a button.
 
-        iwads = D_FindAllIWADs(mission_configs[i].mask);
+        more_iwads = D_FindAllIWADs(mission_configs[i].mask);
 
-        if (iwads[0] != NULL)
+        if (more_iwads[0] != NULL)
         {
             mission = &mission_configs[i];
             TXT_AddWidget(window, TXT_NewButton2(mission_configs[i].label,
@@ -304,7 +304,7 @@ static void OpenGameSelectDialog(GameSelectCallback callback)
             ++num_games;
         }
 
-        free(iwads);
+        free(more_iwads);
     }
 
     TXT_AddWidget(window, TXT_NewStrut(0, 1));
@@ -379,6 +379,6 @@ char *GetGameTitle(void)
 
 const iwad_t **GetIwads(void)
 {
-    return iwads;
+    return my_iwads;
 }
 
