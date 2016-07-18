@@ -27,6 +27,7 @@
 #include "dstrings.h"
 
 #include "d_main.h"
+#include "d_iwad.h"
 #include "deh_main.h"
 
 #include "i_input.h"
@@ -630,6 +631,47 @@ void M_DoSave(int slot)
 	quickSaveSlot = slot;
 }
 
+// Generate a default save name for a save slot. This is so a player
+// using only a a game§pad can just confirm the choice, otherwise they
+// would just have a blank name.
+static void SetDefaultSaveName(int slot)
+{
+    int i;
+    char *iwad;
+
+    // vanilla/default behaviour: removing "empty save"
+    savegamestrings[slot][0] = 0;
+
+    // new behaviour: TODO check whether selected w/ gamepad
+    iwad = gamedescription;
+
+    M_snprintf(savegamestrings[slot], 23, "%s", gamedescription);
+
+    // even the slot iwad might overflow this for final doom
+    // or doom2. gamedescription is simply too long. But it does cover the
+    // startup banner which is useful.HMM!
+    if (strlen(iwad) > SAVESTRINGSIZE)
+    {
+        for (i = 0; i < arrlen(iwads); ++i)
+        {
+            if (iwads[i].mission == gamemission)
+            {
+                iwad = iwads[i].name;
+                break;
+            }
+        }
+    }
+    // XXX NO over flow checking yet
+    if(logical_gamemission == doom)
+    {
+        sprintf(savegamestrings[slot], "%s E%1dM%1d", iwad, gameepisode, gamemap);
+    }
+    else
+    {
+        sprintf(savegamestrings[slot], "%s MAP%02d", iwad, gamemap);
+    }
+}
+
 //
 // User wants to save. Start string input for M_Responder
 //
@@ -648,7 +690,9 @@ void M_SaveSelect(int choice)
     saveSlot = choice;
     M_StringCopy(saveOldString,savegamestrings[choice], SAVESTRINGSIZE);
     if (!strcmp(savegamestrings[choice], EMPTYSTRING))
-	savegamestrings[choice][0] = 0;
+    {
+        SetDefaultSaveName(choice);
+    }
     saveCharIndex = strlen(savegamestrings[choice]);
 }
 
