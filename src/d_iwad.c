@@ -32,22 +32,23 @@
 #include "z_zone.h"
 
 const iwad_t iwads[NUM_IWADS] =
-{
-    { "doom2.wad",    doom2,     commercial, "Doom II" },
-    { "plutonia.wad", pack_plut, commercial, "Final Doom: Plutonia Experiment" },
-    { "tnt.wad",      pack_tnt,  commercial, "Final Doom: TNT: Evilution" },
-    { "doom.wad",     doom,      retail,     "Doom" },
-    { "doom1.wad",    doom,      shareware,  "Doom Shareware" },
-    { "chex.wad",     pack_chex, retail,     "Chex Quest" },
-    { "hacx.wad",     pack_hacx, commercial, "Hacx" },
-    { "freedm.wad",   doom2,     commercial, "FreeDM" },
-    { "freedoom2.wad", doom2,    commercial, "Freedoom: Phase 2" },
-    { "freedoom1.wad", doom,     retail,     "Freedoom: Phase 1" },
-    { "heretic.wad",  heretic,   retail,     "Heretic" },
-    { "heretic1.wad", heretic,   shareware,  "Heretic Shareware" },
-    { "hexen.wad",    hexen,     commercial, "Hexen" },
+{ // XXX: add bfgedition variants; consider non_Doom a bit harder
+    { "doom2.wad",    doom2,     commercial, vanilla,  "Doom II",    "DOOM II: Hell On Earth" },
+    { "plutonia.wad", pack_plut, commercial, vanilla,  "Plutonia",   "Final DOOM: Plutonia Experiment" },
+    { "tnt.wad",      pack_tnt,  commercial, vanilla,  "Evilution",  "Final DOOM: TNT - Evilution" },
+    { "doom.wad",     doom,      retail,     vanilla,  "Doom",       "The Ultimate DOOM" },
+    { "doom.wad",     doom,      registered, vanilla,  "Doom",       "DOOM Registered" },
+    { "doom1.wad",    doom,      shareware,  vanilla,  "Doom",       "Doom Shareware" },
+    { "chex.wad",     pack_chex, retail,     vanilla,  "Chex Quest", "Chex Quest" },
+    { "hacx.wad",     pack_hacx, commercial, vanilla,  "Hacx",       "Hacx" },
+    { "freedm.wad",   doom2,     commercial, freedm,   "FreeDM",     "FreeDM", },
+    { "freedoom1.wad", doom,     retail,     freedoom, "Freedoom 1", "Freedoom: Phase 1", },
+    { "freedoom2.wad", doom2,    commercial, freedoom, "Freedoom 2", "Freedoom: Phase 2", },
+    { "heretic.wad",  heretic,   retail,     vanilla,  "Heretic",    "Heretic" },
+    { "heretic1.wad", heretic,   shareware,  vanilla,  "Heretic",    "Heretic Shareware" },
+    { "hexen.wad",    hexen,     commercial, vanilla,  "Hexen",      "Hexen: Beyond Heretic" },
     //{ "strife0.wad",  strife,    commercial, "Strife" }, // haleyjd: STRIFE-FIXME
-    { "strife1.wad",  strife,    commercial, "Strife" },
+    { "strife1.wad",  strife,    commercial, vanilla,  "Strife",     "Strife" },
 };
 
 // Array of locations to search for IWAD files
@@ -911,7 +912,7 @@ char *D_SuggestGameName(GameMission_t mission, GameMode_t mode)
         if (iwads[i].mission == mission
          && (mode == indetermined || iwads[i].mode == mode))
         {
-            return iwads[i].description;
+            return iwads[i].short_description;
         }
     }
 

@@ -834,53 +834,16 @@ void D_IdentifyVersion(void)
 void D_SetGameDescription(void)
 {
     gamedescription = "Unknown";
+    int i;
 
-    if (logical_gamemission == doom)
+    for (i = 0; i < NUM_IWADS; ++i)
     {
-        // Doom 1.  But which version?
-
-        if (gamevariant == freedoom)
+        if (iwads[i].mission == logical_gamemission
+            && iwads[i].variant == gamevariant
+            && iwads[i].mode == gamemode)
         {
-            gamedescription = GetGameName("Freedoom: Phase 1");
-        }
-        else if (gamemode == retail)
-        {
-            // Ultimate Doom
-
-            gamedescription = GetGameName("The Ultimate DOOM");
-        }
-        else if (gamemode == registered)
-        {
-            gamedescription = GetGameName("DOOM Registered");
-        }
-        else if (gamemode == shareware)
-        {
-            gamedescription = GetGameName("DOOM Shareware");
-        }
-    }
-    else
-    {
-        // Doom 2 of some kind.  But which mission?
-
-        if (gamevariant == freedm)
-        {
-            gamedescription = GetGameName("FreeDM");
-        }
-        else if (gamevariant == freedoom)
-        {
-            gamedescription = GetGameName("Freedoom: Phase 2");
-        }
-        else if (logical_gamemission == doom2)
-        {
-            gamedescription = GetGameName("DOOM 2: Hell on Earth");
-        }
-        else if (logical_gamemission == pack_plut)
-        {
-            gamedescription = GetGameName("DOOM 2: Plutonia Experiment"); 
-        }
-        else if (logical_gamemission == pack_tnt)
-        {
-            gamedescription = GetGameName("DOOM 2: TNT - Evilution");
+            gamedescription = GetGameName(iwads[i].long_description);
+            break;
         }
     }
 }

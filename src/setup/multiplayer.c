@@ -49,12 +49,12 @@ typedef enum
 } warptype_t;
 
 // Fallback IWADs to use if no IWADs are detected.
-
+// XXX: it's a shame to duplicate data from d_iwad.c here
 static const iwad_t fallback_iwads[] = {
-    { "doom.wad",     doom,     registered,  "Doom" },
-    { "heretic.wad",  heretic,  retail,      "Heretic" },
-    { "hexen.wad",    hexen,    commercial,  "Hexen" },
-    { "strife1.wad",  strife,   commercial,  "Strife" },
+    { "doom.wad",     doom,     registered,  vanilla, "Doom", "Doom" },
+    { "heretic.wad",  heretic,  retail,      vanilla, "Heretic", "Heretic" },
+    { "hexen.wad",    hexen,    commercial,  vanilla, "Hexen", "Hexen: Beyond Heretic"},
+    { "strife1.wad",  strife,   commercial,  vanilla, "Strife", "Strife" },
 };
 
 // Array of IWADs found to be installed
@@ -568,7 +568,7 @@ static txt_widget_t *IWADSelector(void)
 
     for (i=0; i < num_iwads; ++i)
     {
-        iwad_labels[i] = found_iwads[i]->description;
+        iwad_labels[i] = found_iwads[i]->short_description;
     }
 
     // If no IWADs are found, provide Doom 2 as an option, but
@@ -586,7 +586,7 @@ static txt_widget_t *IWADSelector(void)
     {
         // We have only one IWAD.  Show as a label.
 
-        result = (txt_widget_t *) TXT_NewLabel(found_iwads[0]->description);
+        result = (txt_widget_t *) TXT_NewLabel(found_iwads[0]->short_description);
     }
     else
     {
