@@ -638,14 +638,13 @@ void M_DoSave(int slot)
 static void SetDefaultSaveName(int slot)
 {
     int p, maplen;
-    char *candidate = NULL;
-    boolean ext_hidden = false;
+    char *cursor;
+    int space;
 
     // vanilla/default behaviour: removing "empty save"
     savegamestrings[slot][0] = 0;
 
     // new behaviour: TODO check whether selected w/ gamepad, offer a default
-    // save name e.g 'my.WAD MAP13' or 'EVILUTION MAP01'
 
     // how much space do we need for episode/mapnumber
     if(logical_gamemission == doom)
@@ -656,6 +655,9 @@ static void SetDefaultSaveName(int slot)
     {
         maplen = 7; // ' MAPxx\0'
     }
+
+    cursor = savegamestrings[slot];
+    space = SAVESTRINGSIZE;
 
     // if the user is using at least one PWAD, use the first one as the
     // descriptive name for the save slot
@@ -669,49 +671,34 @@ static void SetDefaultSaveName(int slot)
             if (M_StringEndsWith(filename, ".wad") || M_StringEndsWith(filename, ".WAD"))
             {
                 filename = M_BaseName(filename);
-                if (strlen(filename) < SAVESTRINGSIZE - maplen)
+                int len = strlen(filename) - 4; // less ".wad"
+                if (len < SAVESTRINGSIZE - maplen)
                 {
-                    candidate = filename;
-
-                    // temporarily truncate the string for use with M_snprintf
-                    candidate[strlen(candidate)-4] = '\0';
-                    ext_hidden = true;
+                    memcpy(cursor, filename, len);
+                    cursor[len] = ' ';
+                    space -= len - 1;
+                    cursor += len + 1;
                 }
                 break;
             }
         }
     }
 
-    // No PWAD. Look at gamedescription, which might have been replaced by Dehacked.
-    // Original string was 78 characters long though, so odds are it will be too long.
-    if (!candidate)
+    // can we fit in the skill level?
+    if (space - maplen >= 8)
     {
-        if (strlen(gamedescription) <= SAVESTRINGSIZE - maplen)
-        {
-            candidate = gamedescription;
-        }
-    }
-
-    if (!candidate)
-    {
-        candidate = "";
+        M_snprintf(cursor, 8, "skill%1d ", startskill);
+        cursor += 7; // overwrite \0
+        space -= 7;
     }
 
     if (logical_gamemission == doom)
     {
-        M_snprintf(savegamestrings[slot], SAVESTRINGSIZE,
-            "%s E%1dM%1d", candidate, gameepisode, gamemap);
+        M_snprintf(cursor, space, "E%1dM%1d", gameepisode, gamemap);
     }
     else
     {
-        M_snprintf(savegamestrings[slot], SAVESTRINGSIZE,
-            "%s MAP%02d", candidate, gamemap);
-    }
-
-    if (ext_hidden)
-    {
-        candidate[strlen(candidate)] = '.';
-        fprintf(stderr, "all better: %s\n", candidate);
+        M_snprintf(cursor, space, "MAP%02d", gamemap);
     }
 }
 
