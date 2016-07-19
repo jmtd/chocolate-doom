@@ -639,6 +639,7 @@ static void SetDefaultSaveName(int slot)
 {
     int p, maplen;
     char *candidate = NULL;
+    boolean ext_hidden = false;
 
     // vanilla/default behaviour: removing "empty save"
     savegamestrings[slot][0] = 0;
@@ -671,6 +672,10 @@ static void SetDefaultSaveName(int slot)
                 if (strlen(filename) < SAVESTRINGSIZE - maplen)
                 {
                     candidate = filename;
+
+                    // temporarily truncate the string for use with M_snprintf
+                    candidate[strlen(candidate)-4] = '\0';
+                    ext_hidden = true;
                 }
                 break;
             }
@@ -719,6 +724,12 @@ static void SetDefaultSaveName(int slot)
     {
         M_snprintf(savegamestrings[slot], SAVESTRINGSIZE,
             "%s MAP%02d", candidate, gamemap);
+    }
+
+    if (ext_hidden)
+    {
+        candidate[strlen(candidate)] = '.';
+        fprintf(stderr, "all better: %s\n", candidate);
     }
 }
 
