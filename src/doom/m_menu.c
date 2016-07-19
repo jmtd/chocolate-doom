@@ -683,6 +683,7 @@ static void SetDefaultSaveName(int slot)
     }
 
     // No PWAD. Look at gamedescription, which might have been replaced by Dehacked.
+    // Original string was 78 characters long though, so odds are it will be too long.
     if (!candidate)
     {
         if (strlen(gamedescription) <= SAVESTRINGSIZE - maplen)
@@ -693,7 +694,7 @@ static void SetDefaultSaveName(int slot)
 
     if (!candidate)
     {
-        candidate = "?";
+        candidate = "";
     }
 
     if (logical_gamemission == doom)
