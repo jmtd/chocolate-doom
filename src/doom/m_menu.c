@@ -632,21 +632,21 @@ void M_DoSave(int slot)
 }
 
 // Generate a default save name for a save slot. This is so a player
-// using only a a game§pad can just confirm the choice, otherwise they
-// would just have a blank name.
+// using only a a gamepad can confirm the choice and save their game
+// XXX: we're a little fast and loose with < versus <= for comps.
+
 static void SetDefaultSaveName(int slot)
 {
-    int i, len, maplen;
-    char *iwad;
+    int p, maplen;
+    char *candidate = NULL;
 
     // vanilla/default behaviour: removing "empty save"
     savegamestrings[slot][0] = 0;
 
-    // new behaviour: TODO check whether selected w/ gamepad
-    #define MIN(x,y) ((x) < (y) ? (x) : (y))
-    iwad = gamedescription;
-    len = MIN(strlen(iwad), SAVESTRINGSIZE);
+    // new behaviour: TODO check whether selected w/ gamepad, offer a default
+    // save name e.g 'my.WAD MAP13' or 'EVILUTION MAP01'
 
+    // how much space do we need for episode/mapnumber
     if(logical_gamemission == doom)
     {
         maplen = 6; // ' ExMx\0'
@@ -656,41 +656,69 @@ static void SetDefaultSaveName(int slot)
         maplen = 7; // ' MAPxx\0'
     }
 
-    // gamedescription is the best iwad description since it might have been
-    // overridden by Dehacked; however, it could be too long for the savegame
-    // string and reserved space for the map name. If so, revert to the iwad
-    // filename.
-    if (len > SAVESTRINGSIZE - maplen)
+    // if the user is using at least one PWAD, use the first one as the
+    // descriptive name for the save slot
+    p = M_CheckParmWithArgs ("-file", 1);
+    if (p)
     {
-        for (i = 0; i < arrlen(iwads); ++i)
+        while (++p != myargc && myargv[p][0] != '-')
         {
-            if (iwads[i].mission == logical_gamemission
-                && iwads[i].mode == gamemode
-                && iwads[i].variant == gamevariant)
+            char *filename = myargv[p];
+
+            if (M_StringEndsWith(filename, ".wad") || M_StringEndsWith(filename, ".WAD"))
             {
-                iwad = iwads[i].short_description;
-                len = MIN(strlen(iwad), SAVESTRINGSIZE);
+                filename = M_BaseName(filename);
+                if (strlen(filename) < SAVESTRINGSIZE - maplen)
+                {
+                    candidate = filename;
+                }
                 break;
             }
         }
     }
 
-    if (len < SAVESTRINGSIZE - maplen)
+    // No PWAD. Look at gamedescription, which might have been replaced by Dehacked.
+    if (!candidate)
     {
-        if (logical_gamemission == doom)
+        if (strlen(gamedescription) <= SAVESTRINGSIZE - maplen)
         {
-            M_snprintf(savegamestrings[slot], SAVESTRINGSIZE,
-                "%s E%1dM%1d", iwad, gameepisode, gamemap);
+            candidate = gamedescription;
         }
         else
         {
-            M_snprintf(savegamestrings[slot], SAVESTRINGSIZE,
-                "%s MAP%02d", iwad, gamemap);
+            // gamedescription too long: look for the short description field in our
+            // IWAD table
+            int i;
+            for (i = 0; i < arrlen(iwads); ++i)
+            {
+                if (iwads[i].mission == logical_gamemission
+                    && iwads[i].mode == gamemode
+                    && iwads[i].variant == gamevariant)
+                {
+                    if (strlen(iwads[i].short_description) <= SAVESTRINGSIZE - maplen)
+                    {
+                        candidate = iwads[i].short_description;
+                        break;
+                    }
+                }
+            }
         }
+    }
+
+    if (!candidate)
+    {
+        candidate = "?";
+    }
+
+    if (logical_gamemission == doom)
+    {
+        M_snprintf(savegamestrings[slot], SAVESTRINGSIZE,
+            "%s E%1dM%1d", candidate, gameepisode, gamemap);
     }
     else
     {
-        M_snprintf(savegamestrings[slot], SAVESTRINGSIZE, "%s", iwad);
+        M_snprintf(savegamestrings[slot], SAVESTRINGSIZE,
+            "%s MAP%02d", candidate, gamemap);
     }
 }
 
