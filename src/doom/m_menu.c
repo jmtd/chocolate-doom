@@ -689,25 +689,6 @@ static void SetDefaultSaveName(int slot)
         {
             candidate = gamedescription;
         }
-        else
-        {
-            // gamedescription too long: look for the short description field in our
-            // IWAD table
-            int i;
-            for (i = 0; i < arrlen(iwads); ++i)
-            {
-                if (iwads[i].mission == logical_gamemission
-                    && iwads[i].mode == gamemode
-                    && iwads[i].variant == gamevariant)
-                {
-                    if (strlen(iwads[i].short_description) <= SAVESTRINGSIZE - maplen)
-                    {
-                        candidate = iwads[i].short_description;
-                        break;
-                    }
-                }
-            }
-        }
     }
 
     if (!candidate)
