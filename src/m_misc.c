@@ -195,21 +195,27 @@ boolean M_StrToInt(const char *str, int *result)
         || sscanf(str, " %d", result) == 1;
 }
 
+char * M_BaseName(char *path)
+{
+    char *src;
+    src = path + strlen(path) - 1;
+
+    // back up until a \ or the start
+    while (src != path && *(src - 1) != DIR_SEPARATOR)
+    {
+        src--;
+    }
+
+    return src;
+}
+
 void M_ExtractFileBase(char *path, char *dest)
 {
     char *src;
     char *filename;
     int length;
 
-    src = path + strlen(path) - 1;
-
-    // back up until a \ or the start
-    while (src != path && *(src - 1) != DIR_SEPARATOR)
-    {
-	src--;
-    }
-
-    filename = src;
+    filename = src = M_BaseName(path);
 
     // Copy up to eight characters
     // Note: Vanilla Doom exits with an error if a filename is specified
