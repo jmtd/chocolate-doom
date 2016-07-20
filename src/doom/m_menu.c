@@ -633,13 +633,11 @@ void M_DoSave(int slot)
 
 // Generate a default save name for a save slot. This is so a player
 // using only a a gamepad can confirm the choice and save their game
-// XXX: we're a little fast and loose with < versus <= for comps.
 
 static void SetDefaultSaveName(int slot)
 {
     int p, maplen;
-    char *cursor;
-    int space;
+    char *cursor, *pastend;
 
     // vanilla/default behaviour: removing "empty save"
     savegamestrings[slot][0] = 0;
@@ -649,18 +647,19 @@ static void SetDefaultSaveName(int slot)
     // how much space do we need for episode/mapnumber
     if(logical_gamemission == doom)
     {
-        maplen = 6; // ' ExMx\0'
+        maplen = 5; // 'ExMx\0'
     }
     else
     {
-        maplen = 7; // ' MAPxx\0'
+        maplen = 6; // 'MAPxx\0'
     }
 
     cursor = savegamestrings[slot];
-    space = SAVESTRINGSIZE;
+    pastend = cursor + SAVESTRINGSIZE;
 
     // if the user is using at least one PWAD, use the first one as the
     // descriptive name for the save slot
+    // XXX: the PWAD might not actually exist/have been loaded
     p = M_CheckParmWithArgs ("-file", 1);
     if (p)
     {
@@ -672,33 +671,34 @@ static void SetDefaultSaveName(int slot)
             {
                 filename = M_BaseName(filename);
                 int len = strlen(filename) - 4; // less ".wad"
-                if (len < SAVESTRINGSIZE - maplen)
+
+                // + 1 for the space character
+                if (SAVESTRINGSIZE - maplen >= len + 1)
                 {
                     memcpy(cursor, filename, len);
-                    cursor[len] = ' ';
-                    space -= len - 1;
-                    cursor += len + 1;
+                    cursor += len;
+                    *cursor++ = ' ';
                 }
                 break;
             }
         }
     }
 
-    // can we fit in the skill level?
-    if (space - maplen >= 8)
+    // can we fit in the skill level? ("skillX ", 7 characters)
+    if ((pastend - cursor) - maplen >= 7)
     {
-        M_snprintf(cursor, 8, "skill%1d ", startskill);
-        cursor += 7; // overwrite \0
-        space -= 7;
+        // M_snprintf writes a \0 that we don't need, hence 8 here
+        M_snprintf(cursor, 8, "skill%1d ", startskill + 1);
+        cursor += 7;
     }
 
     if (logical_gamemission == doom)
     {
-        M_snprintf(cursor, space, "E%1dM%1d", gameepisode, gamemap);
+        M_snprintf(cursor, maplen, "E%1dM%1d", gameepisode, gamemap);
     }
     else
     {
-        M_snprintf(cursor, space, "MAP%02d", gamemap);
+        M_snprintf(cursor, maplen, "MAP%02d", gamemap);
     }
 }
 
