@@ -1214,10 +1214,33 @@ static const char *hw_emu_warning =
 
 static void CheckGLVersion(void)
 {
+    const char * version;
     int glattr;
-    if (!SDL_GL_GetAttribute(SDL_GL_ACCELERATED_VISUAL, &glattr) && !glattr)
+    typedef const GLubyte* (APIENTRY * glStringFn_t)(GLenum);
+    glStringFn_t glfp = (glStringFn_t)SDL_GL_GetProcAddress("glGetString");
+
+    if (glfp)
     {
-        printf("%s", hw_emu_warning);
+        version = (const char *)glfp(GL_VERSION);
+        if (version)
+        {
+            fprintf(stderr, "DEBUG: %s\n", version);
+        }
+
+        if (version && strstr(version, "Mesa"))
+        {
+            printf("%s", hw_emu_warning);
+        }
+    }
+
+    if (!SDL_GL_GetAttribute(SDL_GL_ACCELERATED_VISUAL, &glattr))
+    {
+        fprintf(stderr, "DEBUG: SDL_GL_ACCELERATED_VISUAL=%d\n", glattr);
+
+        if(!glattr)
+        {
+            printf("%s", hw_emu_warning);
+        }
     }
 }
 
