@@ -37,4 +37,6 @@ void M_ClearRandom (void);
 // Defined version of P_Random() - P_Random()
 int P_SubRandom (void);
 
+uint32_t M_Random_uint32 ();
+
 #endif

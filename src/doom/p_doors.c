@@ -22,7 +22,7 @@
 #include "deh_main.h"
 #include "p_local.h"
 #include "i_system.h"
-
+#include "m_random.h"
 #include "s_sound.h"
 
 
@@ -540,6 +540,7 @@ void P_SpawnDoorCloseIn30 (sector_t* sec)
     door->type = vld_normal;
     door->speed = VDOORSPEED;
     door->topcountdown = 30 * TICRATE;
+    door->topheight = M_Random_uint32(); // uninitialised in vanilla
 }
 
 //

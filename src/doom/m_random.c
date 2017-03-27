@@ -16,6 +16,8 @@
 //	Random number LUT.
 //
 
+#include "doomtype.h"
+
 //
 // M_Random
 // Returns a 0-255 number
@@ -69,4 +71,14 @@ int P_SubRandom (void)
 {
     int r = P_Random();
     return r - P_Random();
+}
+
+uint32_t M_Random_uint32 ()
+{
+    unsigned char a,b,c,d;
+    a = M_Random();
+    b = M_Random();
+    c = M_Random();
+    d = M_Random();
+    return a | (b << 8) | (c << 16) | (d << 24);
 }
